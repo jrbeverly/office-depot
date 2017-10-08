@@ -1,12 +1,17 @@
 {
-    "name": "<name>",
+    "name": "Post It",
     "license": "Public Domain",
-    "url": "<url>",
+    "url": "https://thenounproject.com/term/post-it/7392/",
     "author": {
-        "name": "<author>",
-        "url": "<author url>"
+        "name": "Marco Olgio",
+        "url": "https://thenounproject.com/olgio"
     },
     "tags": [
-        "<tags>"
+        "Post It",
+        "Idea",
+        "Note",
+        "Office",
+        "Paper",
+        "Sticky Note"
     ]
 }
