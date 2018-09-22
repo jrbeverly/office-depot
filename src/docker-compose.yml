@@ -1,0 +1,87 @@
+version: "2.1"
+
+services:
+
+  ####
+  gitlab:
+    image: gitlab/gitlab-ce
+    restart: always
+    container_name: gitlab
+    ports:
+      - "2222:22"
+    volumes:
+      - './gitlab/config:/etc/gitlab'
+      - './gitlab/logs:/var/log/gitlab'
+      - './gitlab/data:/var/opt/gitlab'
+
+  runner:
+    image: gitlab/gitlab-runner
+    restart: always
+    container_name: gitlab_runner
+    volumes:
+      - ./gitlab-runner:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+
+  ####
+  nextcloud:
+    image: nextcloud
+    container_name: nextcloud
+    restart: always
+    volumes:
+      - "./nextcloud:/var/www/html"
+      - "./data/mysql:/var/lib/mysql"
+    links:
+      - nextclouddb:nextclouddb
+    environment:
+      MYSQL_HOST: nextclouddb
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: root
+      MYSQL_PASSWORD: "@dm1n1str@tor"
+    depends_on:
+      - nextclouddb
+
+  nextclouddb:
+    image: mysql
+    container_name: nextclouddb
+    restart: always
+    volumes:
+      - "./data/mysql:/var/lib/mysql"
+    environment: 
+      MYSQL_ROOT_PASSWORD: "@dm1n1str@tor"
+  
+  ####
+  minio:
+    image: minio/minio
+    restart: always
+    ports:
+      - "9009:9000"
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: "@dm1n1str@tor"
+    volumes:
+      - "./minio:/root/.minio"
+      - "${PWD}:/export"
+    command: "server /export"
+
+  portainer:
+    image: "portainer/portainer:latest"
+    restart: always
+    ports:
+      - "9000:9000"
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+    volumes:
+      - "./portainer:/data"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/etc/localtime:/etc/localtime:ro"
+    command: "${PORTAINERSTYLE} -H unix:///var/run/docker.sock"
+
+  watchtower:
+    image: v2tec/watchtower
+    restart: always
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    command: "--schedule @midnight --cleanup"
