@@ -13,5 +13,7 @@
     "homelab",
     "experimental"
   ],
-  "languages": []
+  "languages": [
+    "Dockerfile"
+  ]
 }
