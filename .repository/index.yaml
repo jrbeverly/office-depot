@@ -1,0 +1,17 @@
+slug: office-depot
+description: office-depot is a container based software development stack.
+project: workbench
+namespace:
+status: archived
+icon: icon.svg
+license:
+  type: MIT
+  content: Jonathan Beverly <jrbeverly>
+  year: 2017
+topics: |-
+  [
+    "infrastructure-as-code",
+    "docker",
+    "homelab",
+    "experimental"
+  ]
